@@ -216,7 +216,7 @@ export function Hero() {
             </TextEffect>
 
             {showButton && (
-              <motion.button
+              <motion.a
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{
@@ -224,10 +224,11 @@ export function Hero() {
                   type: "spring",
                   stiffness: 100,
                 }}
-                className="hover:bg-neutral-600 cursor-pointer transition-colors duration-300s mt-4 bg-black text-white min-h-11 px-6 outline-offset-2 focus-visible:outline-2 outline-red-500"
+                className="inline-flex items-center ease-out-expo justify-center hover:bg-neutral-600 cursor-pointer transition-colors duration-200 mt-4 bg-black text-white min-h-11 px-6 outline-offset-2 focus-visible:outline-2 outline-red-500"
+                href="#projects"
               >
                 See my work
-              </motion.button>
+              </motion.a>
             )}
           </motion.div>
         </motion.div>

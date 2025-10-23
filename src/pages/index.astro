@@ -1,5 +1,6 @@
 ---
 import { Hero } from "../components/molecules/Hero";
+import { ProjectCard } from "../components/molecules/ProjectCard";
 import "../styles/global.css";
 ---
 
@@ -13,5 +14,49 @@ import "../styles/global.css";
   </head>
   <body>
     <Hero client:load />
+
+    <div class="pt-8"></div>
+
+    <div class="container mx-auto px-4 flex flex-col items-center">
+      <h2 id="projects" class="text-2xl font-medium text-center">Projects</h2>
+
+      <div class="pt-8"></div>
+
+      <div
+        class="max-w-[1100px] w-full grid grid-cols-[repeat(auto-fit,250px)] gap-4 justify-center"
+      >
+        <ProjectCard
+          number="01"
+          title="Cappy"
+          href="https://cappy.haberkamp.dev/"
+        />
+
+        <ProjectCard
+          number="02"
+          title="vijf"
+          href="https://github.com/Haberkamp/vijf"
+        />
+
+        <ProjectCard
+          number="03"
+          title="TypedStorage"
+          href="https://github.com/Haberkamp/typed-storage"
+        />
+
+        <ProjectCard
+          number="04"
+          title="Roving Focus"
+          href="https://github.com/Haberkamp/roving-focus"
+        />
+
+        <ProjectCard
+          number="05"
+          title="Stable Spin"
+          href="https://github.com/Haberkamp/stable-spin"
+        />
+      </div>
+
+      <div class="pt-8"></div>
+    </div>
   </body>
 </html>
