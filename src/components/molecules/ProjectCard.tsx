@@ -1,16 +1,32 @@
+import { useHover } from "../../hooks/useHover";
+
 type Properties = {
   title: string;
   number: string;
   href: string;
+  logo: (properties: { isHovered: boolean }) => React.ReactNode;
 };
 
-export function ProjectCard({ title, number, href }: Properties) {
+export function ProjectCard({ title, number, href, logo }: Properties) {
+  const [ref, isHovered] = useHover<HTMLAnchorElement>();
+
   return (
     <a
       className="size-[250px] bg-[#2D1E0011] cursor-pointer ease-out-expo duration-200 transition-colors hover:bg-black hover:text-white p-4 flex flex-col justify-between"
       href={href}
+      ref={ref}
     >
       <div className="text-xl font-medium">{number}</div>
+
+      <div
+        className="size-[100px] self-center"
+        style={{
+          "--graphic-negative": isHovered ? "#000000" : "#F1F0EE",
+          "--graphic-positive": isHovered ? "#F1F0EE" : "#000000",
+        }}
+      >
+        {logo({ isHovered })}
+      </div>
 
       <div className="flex items-center gap-2 self-center">
         <span className="text-lg font-medium">{title}</span>

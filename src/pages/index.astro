@@ -1,6 +1,8 @@
 ---
+import { GraphicX } from "../components/atoms/GraphicX";
 import { Hero } from "../components/molecules/Hero";
 import { ProjectCard } from "../components/molecules/ProjectCard";
+import { Projects } from "../components/organisms/Projects";
 import "../styles/global.css";
 ---
 
@@ -23,39 +25,7 @@ import "../styles/global.css";
 
         <div class="pt-8"></div>
 
-        <div
-          class="max-w-[1100px] w-full grid grid-cols-[repeat(auto-fit,250px)] gap-4 justify-center"
-        >
-          <ProjectCard
-            number="01"
-            title="Cappy"
-            href="https://cappy.haberkamp.dev/"
-          />
-
-          <ProjectCard
-            number="02"
-            title="vijf"
-            href="https://github.com/Haberkamp/vijf"
-          />
-
-          <ProjectCard
-            number="03"
-            title="TypedStorage"
-            href="https://github.com/Haberkamp/typed-storage"
-          />
-
-          <ProjectCard
-            number="04"
-            title="Roving Focus"
-            href="https://github.com/Haberkamp/roving-focus"
-          />
-
-          <ProjectCard
-            number="05"
-            title="Stable Spin"
-            href="https://github.com/Haberkamp/stable-spin"
-          />
-        </div>
+        <Projects client:load />
 
         <div class="pt-48"></div>
       </div>
