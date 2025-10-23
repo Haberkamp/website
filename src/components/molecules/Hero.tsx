@@ -119,11 +119,11 @@ export function Hero() {
             animate={{
               width: [0, 300],
             }}
-            transition={{ delay: Duration.seconds(4.25).toSeconds() }}
+            transition={{ delay: Duration.seconds(4.5).toSeconds() }}
             style={{ overflow: showButton ? "visible" : "hidden" }}
           >
             <TextEffect
-              delay={Duration.seconds(4.4).toSeconds()}
+              delay={Duration.seconds(4.65).toSeconds()}
               speedReveal={1.5}
               className="text-2xl font-medium text-balance"
               style={{ width: 300 }}
@@ -132,7 +132,7 @@ export function Hero() {
             </TextEffect>
 
             <TextEffect
-              delay={Duration.seconds(4.75).toSeconds()}
+              delay={Duration.seconds(5).toSeconds()}
               speedReveal={2}
               className="text-pretty mt-1"
               style={{ width: 300 }}
