@@ -6,7 +6,10 @@ type Properties = {
 
 export function ProjectCard({ title, number, href }: Properties) {
   return (
-    <a className="size-[250px] bg-[#2D1E0011] cursor-pointer ease-out-expo duration-200 transition-colors hover:bg-black hover:text-white p-4 flex flex-col justify-between">
+    <a
+      className="size-[250px] bg-[#2D1E0011] cursor-pointer ease-out-expo duration-200 transition-colors hover:bg-black hover:text-white p-4 flex flex-col justify-between"
+      href={href}
+    >
       <div className="text-xl font-medium">{number}</div>
 
       <div className="flex items-center gap-2 self-center">
