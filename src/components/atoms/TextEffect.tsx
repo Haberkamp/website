@@ -159,7 +159,8 @@ AnimationComponent.displayName = "AnimationComponent";
 
 const splitText = (text: string, per: PerType) => {
   if (per === "line") return text.split("\n");
-  return text.split(/(\s+)/);
+  // Match words with their trailing whitespace
+  return text.match(/\S+\s*/g) || [];
 };
 
 const hasTransition = (
