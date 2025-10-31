@@ -61,8 +61,8 @@ export function Projects() {
       <ProjectCard
         logo={({ isHovered }) => <GraphicStar isHovered={isHovered} />}
         number="07"
-        title="tsecret"
-        href="https://github.com/Haberkamp/tsecret"
+        title="ts-redacted"
+        href="https://github.com/Haberkamp/ts-redacted"
       />
     </div>
   );
