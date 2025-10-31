@@ -47,7 +47,7 @@ export function Projects() {
       <ProjectCard
         logo={({ isHovered }) => <GraphicFlower isHovered={isHovered} />}
         number="06"
-        title="Dur"
+        title="Duri"
         href="https://github.com/Haberkamp/stable-spin"
       />
     </div>
