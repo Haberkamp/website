@@ -12,7 +12,7 @@ export function ProjectCard({ title, number, href, logo }: Properties) {
 
   return (
     <a
-      className="size-[250px] bg-[#2D1E0011] cursor-pointer ease-out-expo duration-200 transition-colors hover:bg-black hover:text-white p-4 flex flex-col justify-between"
+      className="size-[250px] bg-[#2D1E0011] cursor-pointer ease-out-expo duration-200 transition-colors hover:bg-black hover:text-white p-4 flex flex-col justify-between outline-offset-2 focus-visible:outline-2 outline-red-500"
       href={href}
       ref={ref}
     >
