@@ -137,6 +137,37 @@ export function Hero() {
 
   return (
     <div className="w-full min-h-screen grid place-items-center">
+      <motion.ul
+        className="flex items-center gap-3 absolute top-4 left-4"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{
+          type: "spring",
+          stiffness: 150,
+          velocity: 0,
+          duration: Duration.seconds(1.25).toSeconds(),
+          delay: Duration.seconds(6.5).toSeconds(),
+        }}
+      >
+        <li>
+          <a
+            href="https://x.com/n_haberkamp"
+            className="text-gray-600 hover:text-black transition-colors duration-200 ease-out-expo focus-visible:outline-2 focus-visible:outline-red-500 outline-offset-2"
+          >
+            Twitter
+          </a>
+        </li>
+
+        <li>
+          <a
+            href="https://www.linkedin.com/in/nils-haberkamp/"
+            className="text-gray-600 hover:text-black transition-colors duration-200 ease-out-expo focus-visible:outline-2 focus-visible:outline-red-500 outline-offset-2 hover:text-neutral-1200 transition-colors duration-200 ease-out-expo"
+          >
+            LinkedIn
+          </a>
+        </li>
+      </motion.ul>
+
       <motion.div className="flex flex-col md:flex-row items-center gap-16 px-4">
         <motion.div
           aria-hidden="true"
