@@ -54,7 +54,7 @@ export function Projects() {
         logo={({ isHovered }) => <GraphicFlower isHovered={isHovered} />}
         number="06"
         title="Duri"
-        href="https://github.com/Haberkamp/stable-spin"
+        href="https://github.com/Haberkamp/duri"
       />
     </div>
   );
