@@ -2,6 +2,7 @@ import { GraphicFlower } from "../atoms/GraphicFlower";
 import { GraphicSplitCircle } from "../atoms/GraphicSplitCircle";
 import { GraphicSquareInSquare } from "../atoms/GraphicSquareInSquare";
 import { GraphicSquareInTitltedSquare } from "../atoms/GraphicSquareInTitltedSquare";
+import { GraphicStar } from "../atoms/GraphicStar";
 import { GraphicTwoHalfCircles } from "../atoms/GraphicTwoHalfCircles";
 import { GraphicX } from "../atoms/GraphicX";
 import { ProjectCard } from "../molecules/ProjectCard";
@@ -55,6 +56,13 @@ export function Projects() {
         number="06"
         title="Duri"
         href="https://github.com/Haberkamp/duri"
+      />
+
+      <ProjectCard
+        logo={({ isHovered }) => <GraphicStar isHovered={isHovered} />}
+        number="07"
+        title="tsecret"
+        href="https://github.com/Haberkamp/tsecret"
       />
     </div>
   );
