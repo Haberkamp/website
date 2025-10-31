@@ -212,7 +212,7 @@ export function Hero() {
             >
               I work at Shopware as a Design Engineer. Where I maintain the
               Meteor Design System. I love to build user interfaces that look
-              and great.
+              and feel great.
             </TextEffect>
 
             {showButton && (
