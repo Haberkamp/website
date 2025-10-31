@@ -1,3 +1,4 @@
+import { GraphicFlower } from "../atoms/GraphicFlower";
 import { GraphicSplitCircle } from "../atoms/GraphicSplitCircle";
 import { GraphicSquareInSquare } from "../atoms/GraphicSquareInSquare";
 import { GraphicX } from "../atoms/GraphicX";
@@ -44,7 +45,7 @@ export function Projects() {
       />
 
       <ProjectCard
-        logo={({ isHovered }) => <GraphicX isHovered={isHovered} />}
+        logo={({ isHovered }) => <GraphicFlower isHovered={isHovered} />}
         number="06"
         title="Dur"
         href="https://github.com/Haberkamp/stable-spin"
