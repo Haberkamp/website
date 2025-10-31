@@ -42,6 +42,13 @@ export function Projects() {
         title="Stable Spin"
         href="https://github.com/Haberkamp/stable-spin"
       />
+
+      <ProjectCard
+        logo={({ isHovered }) => <GraphicX isHovered={isHovered} />}
+        number="06"
+        title="Dur"
+        href="https://github.com/Haberkamp/stable-spin"
+      />
     </div>
   );
 }
