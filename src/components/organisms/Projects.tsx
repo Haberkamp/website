@@ -2,6 +2,7 @@ import { GraphicFlower } from "../atoms/GraphicFlower";
 import { GraphicSplitCircle } from "../atoms/GraphicSplitCircle";
 import { GraphicSquareInSquare } from "../atoms/GraphicSquareInSquare";
 import { GraphicSquareInTitltedSquare } from "../atoms/GraphicSquareInTitltedSquare";
+import { GraphicTwoHalfCircles } from "../atoms/GraphicTwoHalfCircles";
 import { GraphicX } from "../atoms/GraphicX";
 import { ProjectCard } from "../molecules/ProjectCard";
 
@@ -23,7 +24,9 @@ export function Projects() {
       />
 
       <ProjectCard
-        logo={({ isHovered }) => <GraphicX isHovered={isHovered} />}
+        logo={({ isHovered }) => (
+          <GraphicTwoHalfCircles isHovered={isHovered} />
+        )}
         number="03"
         title="TypedStorage"
         href="https://github.com/Haberkamp/typed-storage"
