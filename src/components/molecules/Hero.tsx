@@ -1,11 +1,13 @@
-import { motion, useMotionValue } from "motion/react";
+import { motion, useAnimate } from "motion/react";
 import { TextEffect } from "../atoms/TextEffect";
 import { useEffect, useState } from "react";
 import { Duration } from "duri";
 
 export function Hero() {
   const [showButton, setShowButton] = useState(false);
-  const blinkOpacity = useMotionValue(1);
+  const [blinkScope, blinkAnimate] = useAnimate();
+  const [scaleScope, scaleAnimate] = useAnimate();
+  const [rotateScope, rotateAnimate] = useAnimate();
   const shapes = [
     ShapeSquare,
     Checkboard,
@@ -15,7 +17,6 @@ export function Hero() {
     Star,
   ];
   const [currentShapeIndex, setCurrentShapeIndex] = useState(0);
-  const [shouldRotate, setShouldRotate] = useState(false);
   const colors = [
     "#000000", // Black (start)
     "#EB4D35",
@@ -45,95 +46,104 @@ export function Hero() {
     };
   }, []);
 
+  // Blink animation sequence
   useEffect(() => {
-    const t1 = setTimeout(
-      () => blinkOpacity.set(0),
-      Duration.seconds(0.5).toMilliseconds()
-    );
-    const t2 = setTimeout(
-      () => blinkOpacity.set(1),
-      Duration.seconds(1).toMilliseconds()
-    );
-    const t3 = setTimeout(
-      () => blinkOpacity.set(0),
-      Duration.seconds(1.5).toMilliseconds()
-    );
-    const t4 = setTimeout(
-      () => blinkOpacity.set(1),
-      Duration.seconds(2).toMilliseconds()
-    );
-    const t5 = setTimeout(
-      () => blinkOpacity.set(0),
-      Duration.seconds(2.5).toMilliseconds()
-    );
-    const t6 = setTimeout(
-      () => blinkOpacity.set(1),
-      Duration.seconds(3).toMilliseconds()
-    );
+    if (!blinkScope.current) return;
 
-    return () => {
-      clearTimeout(t1);
-      clearTimeout(t2);
-      clearTimeout(t3);
-      clearTimeout(t4);
-      clearTimeout(t5);
-      clearTimeout(t6);
-    };
-  }, []);
+    const timers: number[] = [];
+    const blinkSteps = [
+      { opacity: 0, time: 0.5 },
+      { opacity: 1, time: 1 },
+      { opacity: 0, time: 1.5 },
+      { opacity: 1, time: 2 },
+      { opacity: 0, time: 2.5 },
+      { opacity: 1, time: 3 },
+    ];
 
-  // Swap shapes while the scale animation is running
+    blinkSteps.forEach((step) => {
+      const timer = window.setTimeout(() => {
+        blinkAnimate(
+          blinkScope.current,
+          { opacity: step.opacity },
+          { duration: 0 }
+        );
+      }, step.time * 1000);
+      timers.push(timer);
+    });
+
+    return () => timers.forEach(clearTimeout);
+  }, [blinkScope, blinkAnimate]);
+
+  // Scale + shape + color + rotate animation sequence
   useEffect(() => {
-    const startDelayMs = Duration.seconds(3).toMilliseconds();
-    const swapIntervalMs = 150;
-    const totalSwaps = shapes.length; // Go through all shapes and back to square
+    if (!scaleScope.current || !rotateScope.current) return;
 
-    let intervalId: number | null = null;
-    let swapCount = 0;
+    const startDelay = Duration.seconds(3).toSeconds();
+    const swapInterval = 0.15;
+    const totalSwaps = shapes.length;
+    const colorSwapInterval = 0.2;
+    const scaleDuration = Duration.seconds(1.25).toSeconds();
 
-    const startTimer = window.setTimeout(() => {
-      intervalId = window.setInterval(() => {
-        swapCount++;
+    // Scale animation
+    const scaleControls = scaleAnimate(
+      scaleScope.current,
+      { scale: 1 },
+      {
+        type: "spring",
+        stiffness: 150,
+        velocity: 0,
+        duration: scaleDuration,
+        delay: startDelay,
+      }
+    );
+
+    // Shape swaps using setTimeout coordinated with animation
+    const shapeTimers: number[] = [];
+    for (let i = 0; i < totalSwaps; i++) {
+      const timer = window.setTimeout(() => {
         setCurrentShapeIndex((prev) => (prev + 1) % shapes.length);
+      }, (startDelay + i * swapInterval) * 1000);
+      shapeTimers.push(timer);
+    }
 
-        // Stop after cycling through all shapes and returning to start
-        if (swapCount >= totalSwaps) {
-          if (intervalId !== null) window.clearInterval(intervalId);
-          setShouldRotate(true);
-        }
-      }, swapIntervalMs);
-    }, startDelayMs);
-
-    return () => {
-      window.clearTimeout(startTimer);
-      if (intervalId !== null) window.clearInterval(intervalId);
-    };
-  }, []);
-
-  // Swap colors independently from shapes
-  useEffect(() => {
-    const startDelayMs = Duration.seconds(3).toMilliseconds();
-    const scaleDurationMs = Duration.seconds(1.25).toMilliseconds();
-    const colorSwapIntervalMs = 200; // Different timing than shapes
-
-    let colorIntervalId: number | null = null;
-
-    const startTimer = window.setTimeout(() => {
-      setCurrentColorIndex((prev) => (prev + 1) % colors.length);
-      colorIntervalId = window.setInterval(() => {
+    // Color swaps
+    const colorTimers: number[] = [];
+    const colorCount = Math.floor(scaleDuration / colorSwapInterval);
+    for (let i = 0; i < colorCount; i++) {
+      const timer = window.setTimeout(() => {
         setCurrentColorIndex((prev) => (prev + 1) % colors.length);
-      }, colorSwapIntervalMs);
-    }, startDelayMs);
+      }, (startDelay + i * colorSwapInterval) * 1000);
+      colorTimers.push(timer);
+    }
 
-    const stopTimer = window.setTimeout(() => {
-      if (colorIntervalId !== null) window.clearInterval(colorIntervalId);
-    }, startDelayMs + scaleDurationMs);
+    // Rotation starts after shape swaps complete
+    const rotateStartTime = startDelay + totalSwaps * swapInterval;
+    const rotateTimer = window.setTimeout(() => {
+      rotateAnimate(
+        rotateScope.current,
+        { rotate: 360 },
+        {
+          ease: "linear",
+          duration: 200,
+          repeat: Infinity,
+        }
+      );
+    }, rotateStartTime * 1000);
 
     return () => {
-      window.clearTimeout(startTimer);
-      window.clearTimeout(stopTimer);
-      if (colorIntervalId !== null) window.clearInterval(colorIntervalId);
+      scaleControls.stop();
+      shapeTimers.forEach(clearTimeout);
+      colorTimers.forEach(clearTimeout);
+      clearTimeout(rotateTimer);
     };
-  }, []);
+  }, [
+    scaleScope,
+    rotateScope,
+    scaleAnimate,
+    rotateAnimate,
+    shapes.length,
+    colors.length,
+  ]);
 
   return (
     <div className="w-full min-h-screen grid place-items-center">
@@ -169,35 +179,16 @@ export function Hero() {
       </motion.ul>
 
       <motion.div className="flex flex-col md:flex-row items-center gap-16 px-4">
-        <motion.div
-          aria-hidden="true"
-          className="size-[200px]"
-          style={{ opacity: blinkOpacity }}
-          initial={{ scale: 0.1 }}
-          animate={{ scale: 1 }}
-          transition={{
-            type: "spring",
-            stiffness: 150,
-            velocity: 0,
-            duration: Duration.seconds(1.25).toSeconds(),
-            delay: Duration.seconds(3).toSeconds(),
-          }}
-        >
-          <motion.div
-            layoutId="shape"
-            animate={shouldRotate ? { rotate: 360 } : { rotate: 0 }}
-            transition={
-              shouldRotate
-                ? { ease: "linear", duration: 200, repeat: Infinity }
-                : undefined
-            }
-          >
-            {(() => {
-              const CurrentShape = shapes[currentShapeIndex];
-              return <CurrentShape color={colors[currentColorIndex]} />;
-            })()}
-          </motion.div>
-        </motion.div>
+        <div ref={blinkScope} aria-hidden="true" className="size-[200px]">
+          <div ref={scaleScope} style={{ transform: "scale(0.1)" }}>
+            <div ref={rotateScope}>
+              {(() => {
+                const CurrentShape = shapes[currentShapeIndex];
+                return <CurrentShape color={colors[currentColorIndex]} />;
+              })()}
+            </div>
+          </div>
+        </div>
 
         <motion.div
           layout="preserve-aspect"
