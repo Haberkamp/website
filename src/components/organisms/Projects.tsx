@@ -1,6 +1,7 @@
 import { GraphicFlower } from "../atoms/GraphicFlower";
 import { GraphicSplitCircle } from "../atoms/GraphicSplitCircle";
 import { GraphicSquareInSquare } from "../atoms/GraphicSquareInSquare";
+import { GraphicSquareInTitltedSquare } from "../atoms/GraphicSquareInTitltedSquare";
 import { GraphicX } from "../atoms/GraphicX";
 import { ProjectCard } from "../molecules/ProjectCard";
 
@@ -38,7 +39,9 @@ export function Projects() {
       />
 
       <ProjectCard
-        logo={({ isHovered }) => <GraphicX isHovered={isHovered} />}
+        logo={({ isHovered }) => (
+          <GraphicSquareInTitltedSquare isHovered={isHovered} />
+        )}
         number="05"
         title="Stable Spin"
         href="https://github.com/Haberkamp/stable-spin"
