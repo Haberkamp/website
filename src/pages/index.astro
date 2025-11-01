@@ -1,9 +1,14 @@
 ---
-import { GraphicX } from "../components/atoms/GraphicX";
 import { Hero } from "../components/molecules/Hero";
-import { ProjectCard } from "../components/molecules/ProjectCard";
 import { Projects } from "../components/organisms/Projects";
 import "../styles/global.css";
+export const prerender = false;
+
+const watchedAnimation = Astro.cookies.get("watched-animation");
+const rotationCookie = Astro.cookies.get("rotation");
+const initialRotation = rotationCookie?.value
+  ? parseFloat(rotationCookie.value)
+  : 0;
 ---
 
 <html lang="en" class="scroll-smooth">
@@ -20,7 +25,11 @@ import "../styles/global.css";
   </head>
   <body class="relative pb-32 sm:pb-48 md:pb-96">
     <div class="relative z-10 bg-white">
-      <Hero client:load />
+      <Hero
+        skipAnimation={!!watchedAnimation}
+        initialRotation={initialRotation}
+        client:load
+      />
 
       <div class="pt-8"></div>
 

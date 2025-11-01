@@ -1,13 +1,23 @@
 import { motion, useAnimate } from "motion/react";
 import { TextEffect } from "../atoms/TextEffect";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Duration } from "duri";
 
-export function Hero() {
-  const [showButton, setShowButton] = useState(false);
+export function Hero({
+  skipAnimation,
+  initialRotation = 0,
+}: {
+  skipAnimation: boolean;
+  initialRotation?: number;
+}) {
+  const [showButton, setShowButton] = useState(skipAnimation);
+  const [animationCompleted, setAnimationCompleted] = useState(skipAnimation);
   const [blinkScope, blinkAnimate] = useAnimate();
   const [scaleScope, scaleAnimate] = useAnimate();
   const [rotateScope, rotateAnimate] = useAnimate();
+  const [currentRotation, setCurrentRotation] = useState(initialRotation);
+  const rotationStartTimeRef = useRef<number | null>(null);
+  const animationFrameRef = useRef<number | null>(null);
   const shapes = [
     ShapeSquare,
     Checkboard,
@@ -46,9 +56,95 @@ export function Hero() {
     };
   }, []);
 
+  // Set cookie when animation completes
+  useEffect(() => {
+    if (skipAnimation) return;
+
+    const animationCompleteTime = Duration.seconds(6.5).toSeconds() * 1000;
+    const timer = window.setTimeout(() => {
+      document.cookie = "watched-animation=true; path=/; max-age=31536000";
+      setAnimationCompleted(true);
+    }, animationCompleteTime);
+
+    return () => clearTimeout(timer);
+  }, [skipAnimation]);
+
+  // Store rotation value in cookie
+  useEffect(() => {
+    const updateRotationCookie = () => {
+      document.cookie = `rotation=${currentRotation.toFixed(
+        2
+      )}; path=/; max-age=60`;
+    };
+
+    // Update cookie immediately when rotation changes
+    updateRotationCookie();
+
+    // Also update cookie periodically to ensure it stays fresh
+    const interval = setInterval(updateRotationCookie, 1000);
+
+    return () => clearInterval(interval);
+  }, [currentRotation]);
+
+  // Track rotation value using requestAnimationFrame
+  useEffect(() => {
+    if (!rotateScope.current) return;
+
+    const checkRotation = () => {
+      if (rotationStartTimeRef.current === null) {
+        // Check if rotation has started by looking at the element's transform
+        const element = rotateScope.current as HTMLElement;
+        const computedStyle = window.getComputedStyle(element);
+        const transform = computedStyle.transform;
+
+        if (
+          transform &&
+          transform !== "none" &&
+          transform !== "matrix(1, 0, 0, 1, 0, 0)"
+        ) {
+          rotationStartTimeRef.current = Date.now();
+        } else {
+          animationFrameRef.current = requestAnimationFrame(checkRotation);
+          return;
+        }
+      }
+
+      const trackRotation = () => {
+        if (!rotateScope.current) return;
+
+        const element = rotateScope.current as HTMLElement;
+        const computedStyle = window.getComputedStyle(element);
+        const transform = computedStyle.transform;
+
+        if (transform && transform !== "none") {
+          const matrix = new DOMMatrix(transform);
+          const angle = Math.atan2(matrix.b, matrix.a) * (180 / Math.PI);
+          const normalizedAngle = angle >= 0 ? angle : angle + 360;
+          setCurrentRotation(normalizedAngle);
+        }
+
+        animationFrameRef.current = requestAnimationFrame(trackRotation);
+      };
+
+      trackRotation();
+    };
+
+    animationFrameRef.current = requestAnimationFrame(checkRotation);
+
+    return () => {
+      if (animationFrameRef.current !== null) {
+        cancelAnimationFrame(animationFrameRef.current);
+      }
+    };
+  }, [rotateScope]);
+
   // Blink animation sequence
   useEffect(() => {
     if (!blinkScope.current) return;
+    if (skipAnimation) {
+      blinkAnimate(blinkScope.current, { opacity: 1 }, { duration: 0 });
+      return;
+    }
 
     const timers: number[] = [];
     const blinkSteps = [
@@ -72,11 +168,29 @@ export function Hero() {
     });
 
     return () => timers.forEach(clearTimeout);
-  }, [blinkScope, blinkAnimate]);
+  }, [blinkScope, blinkAnimate, skipAnimation]);
 
   // Scale + shape + color + rotate animation sequence
   useEffect(() => {
     if (!scaleScope.current || !rotateScope.current) return;
+
+    if (skipAnimation) {
+      scaleAnimate(scaleScope.current, { scale: 1 }, { duration: 0 });
+      setCurrentShapeIndex(0);
+      setCurrentColorIndex(0);
+      rotationStartTimeRef.current = Date.now();
+      const startRotation = initialRotation % 360;
+      rotateAnimate(
+        rotateScope.current,
+        { rotate: [startRotation, startRotation + 360] },
+        {
+          ease: "linear",
+          duration: 200,
+          repeat: Infinity,
+        }
+      );
+      return;
+    }
 
     const startDelay = Duration.seconds(3).toSeconds();
     const swapInterval = 0.15;
@@ -119,9 +233,11 @@ export function Hero() {
     // Rotation starts after shape swaps complete
     const rotateStartTime = startDelay + totalSwaps * swapInterval;
     const rotateTimer = window.setTimeout(() => {
+      rotationStartTimeRef.current = Date.now();
+      const startRotation = initialRotation % 360;
       rotateAnimate(
         rotateScope.current,
-        { rotate: 360 },
+        { rotate: [startRotation, startRotation + 360] },
         {
           ease: "linear",
           duration: 200,
@@ -143,26 +259,50 @@ export function Hero() {
     rotateAnimate,
     shapes.length,
     colors.length,
+    skipAnimation,
+    initialRotation,
   ]);
+
+  const handleReplay = () => {
+    document.cookie = "watched-animation=; path=/; max-age=0";
+    document.cookie = "rotation=; path=/; max-age=0";
+    window.location.reload();
+  };
 
   return (
     <div className="w-full min-h-screen grid place-items-center">
+      {(skipAnimation || animationCompleted) && (
+        <motion.button
+          onClick={handleReplay}
+          initial={{ opacity: skipAnimation ? 1 : 0 }}
+          animate={{ opacity: 1 }}
+          transition={skipAnimation ? { duration: 0 } : { duration: 0.3 }}
+          className="absolute cursor-pointer top-4 right-4 capped-text-base text-gray-600 hover:text-black transition-colors duration-200 ease-out-expo focus-visible:outline-2 focus-visible:outline-red-500 outline-offset-2"
+        >
+          Replay animation
+        </motion.button>
+      )}
+
       <motion.ul
         className="flex items-center gap-3 absolute top-4 left-4"
-        initial={{ opacity: 0 }}
+        initial={{ opacity: skipAnimation ? 1 : 0 }}
         animate={{ opacity: 1 }}
-        transition={{
-          type: "spring",
-          stiffness: 150,
-          velocity: 0,
-          duration: Duration.seconds(1.25).toSeconds(),
-          delay: Duration.seconds(6.5).toSeconds(),
-        }}
+        transition={
+          skipAnimation
+            ? { duration: 0 }
+            : {
+                type: "spring",
+                stiffness: 150,
+                velocity: 0,
+                duration: Duration.seconds(1.25).toSeconds(),
+                delay: Duration.seconds(6.5).toSeconds(),
+              }
+        }
       >
         <li>
           <a
             href="https://x.com/n_haberkamp"
-            className="text-gray-600 hover:text-black transition-colors duration-200 ease-out-expo focus-visible:outline-2 focus-visible:outline-red-500 outline-offset-2"
+            className="text-gray-600 hover:text-black capped-text-base transition-colors duration-200 ease-out-expo focus-visible:outline-2 focus-visible:outline-red-500 outline-offset-2"
           >
             Twitter
           </a>
@@ -171,7 +311,7 @@ export function Hero() {
         <li>
           <a
             href="https://www.linkedin.com/in/nils-haberkamp/"
-            className="text-gray-600 hover:text-black transition-colors duration-200 ease-out-expo focus-visible:outline-2 focus-visible:outline-red-500 outline-offset-2 hover:text-neutral-1200 transition-colors duration-200 ease-out-expo"
+            className="text-gray-600 hover:text-black capped-text-base transition-colors duration-200 ease-out-expo focus-visible:outline-2 focus-visible:outline-red-500 outline-offset-2 hover:text-neutral-1200 transition-colors duration-200 ease-out-expo"
           >
             LinkedIn
           </a>
@@ -180,8 +320,18 @@ export function Hero() {
 
       <motion.div className="flex flex-col md:flex-row items-center gap-16 px-4">
         <div ref={blinkScope} aria-hidden="true" className="size-[200px]">
-          <div ref={scaleScope} style={{ transform: "scale(0.1)" }}>
-            <div ref={rotateScope}>
+          <div
+            ref={scaleScope}
+            style={{ transform: skipAnimation ? "scale(1)" : "scale(0.1)" }}
+          >
+            <div
+              ref={rotateScope}
+              style={
+                skipAnimation && initialRotation !== 0
+                  ? { transform: `rotate(${initialRotation}deg)` }
+                  : undefined
+              }
+            >
               {(() => {
                 const CurrentShape = shapes[currentShapeIndex];
                 return <CurrentShape color={colors[currentColorIndex]} />;
@@ -201,7 +351,11 @@ export function Hero() {
           <motion.div
             className="max-w-[300px]"
             initial={
-              isMobile
+              skipAnimation
+                ? isMobile
+                  ? { height: "auto", width: 300 }
+                  : { width: 300, height: "auto" }
+                : isMobile
                 ? { height: 0, width: 300 }
                 : { width: 0, height: "auto" }
             }
@@ -210,42 +364,71 @@ export function Hero() {
                 ? { height: "auto", width: 300 }
                 : { width: 300, height: "auto" }
             }
-            transition={{
-              ease: "easeInOut",
-              delay: Duration.seconds(4.5).toSeconds(),
-            }}
+            transition={
+              skipAnimation
+                ? { duration: 0 }
+                : {
+                    ease: "easeInOut",
+                    delay: Duration.seconds(4.5).toSeconds(),
+                  }
+            }
             style={{ overflow: showButton ? "visible" : "hidden" }}
           >
-            <TextEffect
-              delay={Duration.seconds(4.65).toSeconds()}
-              speedReveal={1.5}
-              className="text-2xl font-medium text-balance"
-              style={{ width: 300 }}
-            >
-              Hi, I'm Nils.
-            </TextEffect>
+            {skipAnimation ? (
+              <>
+                <p
+                  className="text-2xl font-medium text-balance"
+                  style={{ width: 300 }}
+                >
+                  Hi, I'm Nils.
+                </p>
+                <p className="text-pretty mt-1" style={{ width: 300 }}>
+                  I work at Shopware as a Design Engineer. Where I maintain the
+                  Meteor Design System. I love to build user interfaces that
+                  look and feel great.
+                </p>
+              </>
+            ) : (
+              <>
+                <TextEffect
+                  delay={Duration.seconds(4.65).toSeconds()}
+                  speedReveal={1.5}
+                  className="text-2xl font-medium text-balance"
+                  style={{ width: 300 }}
+                >
+                  Hi, I'm Nils.
+                </TextEffect>
 
-            <TextEffect
-              delay={Duration.seconds(5).toSeconds()}
-              speedReveal={6}
-              className="text-pretty mt-1"
-              style={{ width: 300 }}
-              onAnimationComplete={() => setShowButton(true)}
-            >
-              I work at Shopware as a Design Engineer. Where I maintain the
-              Meteor Design System. I love to build user interfaces that look
-              and feel great.
-            </TextEffect>
+                <TextEffect
+                  delay={Duration.seconds(5).toSeconds()}
+                  speedReveal={6}
+                  className="text-pretty mt-1"
+                  style={{ width: 300 }}
+                  onAnimationComplete={() => setShowButton(true)}
+                >
+                  I work at Shopware as a Design Engineer. Where I maintain the
+                  Meteor Design System. I love to build user interfaces that
+                  look and feel great.
+                </TextEffect>
+              </>
+            )}
 
             {showButton && (
               <motion.a
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{
-                  visualDuration: Duration.seconds(0.15).toSeconds(),
-                  type: "spring",
-                  stiffness: 100,
+                initial={{
+                  opacity: skipAnimation ? 1 : 0,
+                  y: skipAnimation ? 0 : 10,
                 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={
+                  skipAnimation
+                    ? { duration: 0 }
+                    : {
+                        visualDuration: Duration.seconds(0.15).toSeconds(),
+                        type: "spring",
+                        stiffness: 100,
+                      }
+                }
                 className="inline-flex items-center ease-out-expo justify-center hover:bg-neutral-600 cursor-pointer transition-colors duration-200 mt-4 bg-black text-white min-h-11 px-6 outline-offset-2 focus-visible:outline-2 outline-red-500"
                 href="#projects"
               >
