@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Cursor } from "../atoms/Cursor";
 import { GraphicFlower } from "../atoms/GraphicFlower";
 import { GraphicSplitCircle } from "../atoms/GraphicSplitCircle";
@@ -9,15 +9,38 @@ import { GraphicTwoHalfCircles } from "../atoms/GraphicTwoHalfCircles";
 import { GraphicX } from "../atoms/GraphicX";
 import { ProjectCard } from "../molecules/ProjectCard";
 
+const ITEM_COUNT = 7;
+const COL_WIDTH = 250;
+
 export function Projects() {
   const [cursorText, setCursorText] = useState<string>("Cappy");
+  const [fillers, setFillers] = useState(0);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const calc = () => {
+      if (!ref.current) return;
+      const width = ref.current.offsetWidth;
+      const cols = Math.floor(width / COL_WIDTH);
+      const rows = Math.ceil(ITEM_COUNT / cols);
+      setFillers(cols * rows - ITEM_COUNT);
+    };
+    calc();
+    window.addEventListener("resize", calc);
+    return () => window.removeEventListener("resize", calc);
+  }, []);
 
   return (
-    <div className="max-w-[1100px] w-full grid grid-cols-[repeat(auto-fit,250px)] gap-4 justify-center">
+    <div
+      ref={ref}
+      className="max-w-[1100px] w-full grid grid-cols-[repeat(auto-fit,250px)] gap-4 justify-center"
+    >
       <Cursor attachToParent>
-        <div className="bg-red-500 text-white py-2 px-4 max-w-[320px]">
-          {cursorText}
-        </div>
+        {cursorText && (
+          <div className="bg-red-500 text-white py-2 px-4 max-w-[320px]">
+            {cursorText}
+          </div>
+        )}
       </Cursor>
 
       <ProjectCard
@@ -88,6 +111,13 @@ export function Projects() {
         href="https://github.com/Haberkamp/ts-redacted"
         onHover={setCursorText}
       />
+      {Array.from({ length: fillers }).map((_, i) => (
+        <div
+          key={i}
+          className="cursor-pointer w-[250px] h-full"
+          onMouseEnter={() => setCursorText("")}
+        />
+      ))}
     </div>
   );
 }
