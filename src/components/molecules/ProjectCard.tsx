@@ -32,7 +32,9 @@ export function ProjectCard({
       href={href}
       ref={ref}
     >
-      <div className="text-xl font-medium">{number}</div>
+      <div className="text-xl font-medium" aria-hidden="true">
+        {number}
+      </div>
 
       <div
         className="size-[100px] self-center"
@@ -49,6 +51,8 @@ export function ProjectCard({
 
         <ExternalLinkIcon />
       </div>
+
+      <span className="sr-only">{description}</span>
     </a>
   );
 }
