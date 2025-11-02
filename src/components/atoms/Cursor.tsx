@@ -34,6 +34,7 @@ export function Cursor({
   transition,
   onPositionChange,
 }: CursorProps) {
+  const [isTouchDevice, setIsTouchDevice] = useState(false);
   const cursorX = useMotionValue(0);
   const cursorY = useMotionValue(0);
   const cursorRef = useRef<HTMLDivElement>(null);
@@ -41,12 +42,24 @@ export function Cursor({
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      cursorX.set(window.innerWidth / 2);
-      cursorY.set(window.innerHeight / 2);
+      const hasTouch =
+        "ontouchstart" in window ||
+        navigator.maxTouchPoints > 0 ||
+        window.matchMedia("(pointer: coarse)").matches;
+      setIsTouchDevice(hasTouch);
     }
   }, []);
 
   useEffect(() => {
+    if (typeof window !== "undefined" && !isTouchDevice) {
+      cursorX.set(window.innerWidth / 2);
+      cursorY.set(window.innerHeight / 2);
+    }
+  }, [isTouchDevice]);
+
+  useEffect(() => {
+    if (isTouchDevice) return;
+
     if (!attachToParent) {
       document.body.style.cursor = "none";
     } else {
@@ -63,13 +76,16 @@ export function Cursor({
 
     return () => {
       document.removeEventListener("mousemove", updatePosition);
+      document.body.style.cursor = "auto";
     };
-  }, [cursorX, cursorY, onPositionChange]);
+  }, [cursorX, cursorY, onPositionChange, attachToParent, isTouchDevice]);
 
   const cursorXSpring = useSpring(cursorX, springConfig || { duration: 0 });
   const cursorYSpring = useSpring(cursorY, springConfig || { duration: 0 });
 
   useEffect(() => {
+    if (isTouchDevice) return;
+
     const handleVisibilityChange = (visible: boolean) => {
       setIsVisible(visible);
     };
@@ -77,33 +93,29 @@ export function Cursor({
     if (attachToParent && cursorRef.current) {
       const parent = cursorRef.current.parentElement;
       if (parent) {
-        parent.addEventListener("mouseenter", () => {
+        const handleMouseEnter = () => {
           parent.style.cursor = "none";
           handleVisibilityChange(true);
-        });
-        parent.addEventListener("mouseleave", () => {
+        };
+        const handleMouseLeave = () => {
           parent.style.cursor = "auto";
           handleVisibilityChange(false);
-        });
+        };
+
+        parent.addEventListener("mouseenter", handleMouseEnter);
+        parent.addEventListener("mouseleave", handleMouseLeave);
+
+        return () => {
+          parent.removeEventListener("mouseenter", handleMouseEnter);
+          parent.removeEventListener("mouseleave", handleMouseLeave);
+        };
       }
     }
+  }, [attachToParent, isTouchDevice]);
 
-    return () => {
-      if (attachToParent && cursorRef.current) {
-        const parent = cursorRef.current.parentElement;
-        if (parent) {
-          parent.removeEventListener("mouseenter", () => {
-            parent.style.cursor = "none";
-            handleVisibilityChange(true);
-          });
-          parent.removeEventListener("mouseleave", () => {
-            parent.style.cursor = "auto";
-            handleVisibilityChange(false);
-          });
-        }
-      }
-    };
-  }, [attachToParent]);
+  if (isTouchDevice) {
+    return null;
+  }
 
   return (
     <motion.div
