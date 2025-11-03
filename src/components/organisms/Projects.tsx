@@ -114,7 +114,7 @@ export function Projects() {
       {Array.from({ length: fillers }).map((_, i) => (
         <div
           key={i}
-          className="cursor-pointer w-[250px] h-full"
+          className="cursor-default w-[250px] h-full"
           onMouseEnter={() => setCursorText("")}
         />
       ))}
