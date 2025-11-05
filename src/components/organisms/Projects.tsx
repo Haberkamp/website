@@ -13,7 +13,7 @@ const ITEM_COUNT = 7;
 const COL_WIDTH = 250;
 
 export function Projects() {
-  const [cursorText, setCursorText] = useState<string>("Cappy");
+  const [cursorText, setCursorText] = useState<string>("");
   const [fillers, setFillers] = useState(0);
   const ref = useRef<HTMLDivElement>(null);
 
