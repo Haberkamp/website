@@ -11,4 +11,9 @@ export default defineConfig({
   integrations: [react()],
   vite: { plugins: [tailwindcss()] },
   adapter: vercel(),
+  markdown: {
+    shikiConfig: {
+      theme:  'vitesse-light'
+    }
+  }
 });
