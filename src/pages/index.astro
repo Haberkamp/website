@@ -41,10 +41,10 @@ const articles: CollectionEntry<"posts">[] = await getCollection("posts");
 
         <div class="pt-8"></div>
 
-        <ul class="flex max-w-2xl mx-auto flex-col gap-4">
+        <ul class="flex max-w-2xl mx-auto flex-col">
           {articles.map((article) => (
             <li>
-              <a href={`/posts/${article.id}`} class="block hover:underline focus-visible:outline-2 focus-visible:outline-red-500 outline-offset-2">
+              <a href={`/posts/${article.id}`} class="transition-colors duration-200 ease-out-expo block hover:text-white hover:bg-black px-6 py-4 focus-visible:outline-2 focus-visible:outline-red-500 outline-offset-2">
                 <h3 class="text-xl font-medium">{article.data.title}</h3>
 
                 <p>{article.data.content}</p>
