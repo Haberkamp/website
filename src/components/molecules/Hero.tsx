@@ -277,7 +277,7 @@ export function Hero({
           initial={{ opacity: skipAnimation ? 1 : 0 }}
           animate={{ opacity: 1 }}
           transition={skipAnimation ? { duration: 0 } : { duration: 0.3 }}
-          className="absolute cursor-pointer top-4 right-4 capped-text-base text-gray-600 hover:text-black transition-colors duration-200 ease-out-expo focus-visible:outline-2 focus-visible:outline-red-500 outline-offset-2"
+          className="absolute cursor-pointer top-4 right-4 text-base text-gray-600 hover:text-black transition-colors duration-200 ease-out-expo focus-visible:outline-2 focus-visible:outline-red-500 outline-offset-2"
         >
           Replay animation
         </motion.button>
@@ -302,7 +302,7 @@ export function Hero({
         <li>
           <a
             href="https://x.com/n_haberkamp"
-            className="text-gray-600 hover:text-black capped-text-base transition-colors duration-200 ease-out-expo focus-visible:outline-2 focus-visible:outline-red-500 outline-offset-2"
+            className="text-gray-600 hover:text-black text-base transition-colors duration-200 ease-out-expo focus-visible:outline-2 focus-visible:outline-red-500 outline-offset-2"
           >
             Twitter
           </a>
@@ -311,7 +311,7 @@ export function Hero({
         <li>
           <a
             href="https://www.linkedin.com/in/nils-haberkamp/"
-            className="text-gray-600 hover:text-black capped-text-base transition-colors duration-200 ease-out-expo focus-visible:outline-2 focus-visible:outline-red-500 outline-offset-2 hover:text-neutral-1200 transition-colors duration-200 ease-out-expo"
+            className="text-gray-600 hover:text-black text-base transition-colors duration-200 ease-out-expo focus-visible:outline-2 focus-visible:outline-red-500 outline-offset-2 hover:text-neutral-1200 transition-colors duration-200 ease-out-expo"
           >
             LinkedIn
           </a>
