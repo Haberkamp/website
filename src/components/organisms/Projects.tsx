@@ -79,7 +79,7 @@ export function Projects() {
         number="04"
         title="Roving Focus"
         description="A roving focus component for React"
-        href="https://github.com/Haberkamp/roving-focus"
+        href="https://roving-focus.haberkamp.dev/"
         onHover={setCursorText}
       />
 
