@@ -66,3 +66,7 @@
   background-color: #2D1E0011 !important;
   border-radius: 0 !important;
 }
+
+.prose img {
+  margin-inline: auto;
+}

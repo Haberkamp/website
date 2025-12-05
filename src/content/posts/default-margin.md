@@ -10,7 +10,7 @@ Default margins on components are well intended, but from experience they cause 
 
 Let's say you have a row with multiple input fields. Now you could add some margin to every single input field, but that would mean adding a dozen or so classes just to add some spacing for every single input field, instead we add some bottom margin to _every_ input field, done. Default margins space out input fields in a consistent way across the whole app, which improves user experience.
 
-![Two cards placed next to each other. The left card ](./assets/default-margin-card-comparison-light.png)
+![Two cards placed next to each other. The left card ](./assets/default-margin-card-comparison.png)
 
 Now we already have our first problem. At the bottom of the card, we have some unnecessary spacing. To get rid of that we can simply add a class to that element and remove the margin, or we could use a `:last-of-type` selector to it and remove the margin.
 
@@ -18,7 +18,7 @@ Default margins make base components work only in a single context. It's no long
 
 But now, we need to use the `TextInput` inside a toolbar. Now we have the same problem again. The toolbar is too large. The solution? We add a class and remove the bottom margin. We have to do this every time we need to use the `TextInput` outside of a card. This goes against the idea of base components. We create base components so we can use them in any context, and not a specific one.
 
-![A toolbar with a search in the middle and two buttons on right. A sign in and a log in button](./assets/default-margin-toolbar-light.png)
+![A toolbar with a search in the middle and two buttons on right. A sign in and a log in button](./assets/default-margin-toolbar.png)
 
 I recently talked to a developer who used the base components every day. For him, the biggest pain point was the default margin. He told me that he uses the base components outside of the card's body a lot. Sometimes in a top toolbar, in a card footer, or in a custom-built list. It annoyed him that he needed to manually remove the margin many times over and over.
 
@@ -46,7 +46,7 @@ The above selector adds a top margin to every direct child except the first one.
 </form>
 ```
 
-![A form with three vertically aligned input fields. Each input has a bottom margin of 1rem, except the last one has none.](./assets/stack-form-light.png)
+![A form with three vertically aligned input fields. Each input has a bottom margin of 1rem, except the last one has none.](./assets/stack-form.png)
 
 Now, what if you want to have spacing that's wider than 1rem? That's easy; just define a CSS custom property called `--space` using inline styles or by adding a custom class and defining the spacing there.
 
@@ -78,7 +78,7 @@ But what if I have an edge case where everything needs the same spacing except f
 </form>
 ```
 
-![A form with three vertically aligned input fields and a button. The input fields have a bottom margin of one rem, except the last one. It has a bottom margin of 2 rem.](./assets/stack-form-with-button-light.png)
+![A form with three vertically aligned input fields and a button. The input fields have a bottom margin of one rem, except the last one. It has a bottom margin of 2 rem.](./assets/stack-form-with-button.png)
 
 ## Potential downsides
 
