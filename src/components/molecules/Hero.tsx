@@ -12,6 +12,7 @@ export function Hero({
   const blinkRef = useRef<HTMLDivElement>(null);
   const scaleRef = useRef<HTMLDivElement>(null);
   const rotateRef = useRef<HTMLDivElement>(null);
+  const stopRotationCookieRef = useRef(false);
 
   const [showButton, setShowButton] = useState(skipAnimation);
   const [animationCompleted, setAnimationCompleted] = useState(skipAnimation);
@@ -112,6 +113,7 @@ export function Hero({
   // Rotation cookie
   useEffect(() => {
     const update = () => {
+      if (stopRotationCookieRef.current) return;
       document.cookie = `rotation=${currentRotation.toFixed(2)}; path=/; max-age=60`;
     };
     update();
@@ -120,6 +122,7 @@ export function Hero({
   }, [currentRotation]);
 
   const handleReplay = () => {
+    stopRotationCookieRef.current = true;
     document.cookie = "watched-animation=; path=/; max-age=0";
     document.cookie = "rotation=; path=/; max-age=0";
     window.location.reload();
