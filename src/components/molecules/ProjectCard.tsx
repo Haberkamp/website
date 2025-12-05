@@ -28,7 +28,7 @@ export function ProjectCard({
 
   return (
     <a
-      className="cursor-none size-[250px] bg-[#2D1E0011] ease-out-expo duration-200 transition-colors hover:bg-black hover:text-white p-4 flex flex-col justify-between outline-offset-2 focus-visible:outline-2 outline-red-500"
+      className="cursor-none min-w-[250px] aspect-square bg-[#2D1E0011] ease-out-expo duration-200 transition-colors hover:bg-black hover:text-white p-4 flex flex-col justify-between outline-offset-2 focus-visible:outline-2 outline-red-500"
       href={href}
       ref={ref}
     >

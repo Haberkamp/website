@@ -10,7 +10,8 @@ import { GraphicX } from "../atoms/GraphicX";
 import { ProjectCard } from "../molecules/ProjectCard";
 
 const ITEM_COUNT = 7;
-const COL_WIDTH = 250;
+const COL_MIN_WIDTH = 250;
+const GAP = 16;
 
 export function Projects() {
   const [cursorText, setCursorText] = useState<string>("");
@@ -21,7 +22,7 @@ export function Projects() {
     const calc = () => {
       if (!ref.current) return;
       const width = ref.current.offsetWidth;
-      const cols = Math.floor(width / COL_WIDTH);
+      const cols = Math.floor((width + GAP) / (COL_MIN_WIDTH + GAP));
       const rows = Math.ceil(ITEM_COUNT / cols);
       setFillers(cols * rows - ITEM_COUNT);
     };
@@ -33,7 +34,7 @@ export function Projects() {
   return (
     <div
       ref={ref}
-      className="max-w-[1100px] w-full grid grid-cols-[repeat(auto-fit,250px)] gap-4 justify-center"
+      className="w-full grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-4"
     >
       <Cursor attachToParent>
         {cursorText && (
@@ -114,7 +115,7 @@ export function Projects() {
       {Array.from({ length: fillers }).map((_, i) => (
         <div
           key={i}
-          className="cursor-default w-[250px] h-full"
+          className="cursor-default min-w-[250px] aspect-square"
           onMouseEnter={() => setCursorText("")}
         />
       ))}
