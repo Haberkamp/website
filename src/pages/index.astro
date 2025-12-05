@@ -1,6 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import { Hero } from "../components/molecules/Hero";
+import { TopNav } from "../components/molecules/TopNav";
 import { Projects } from "../components/organisms/Projects";
 import "../styles/global.css";
 import { getCollection, type CollectionEntry } from "astro:content";
@@ -18,11 +19,14 @@ const articles: CollectionEntry<"posts">[] = await getCollection("posts");
 
 <Layout title="Nils Haberkamp">
   <div class="relative z-10 bg-white">
-      <Hero
-        skipAnimation={!!watchedAnimation}
-        initialRotation={initialRotation}
-        client:load
-      />
+      <div class="w-full min-h-screen relative">
+        <TopNav skipAnimation={!!watchedAnimation} client:load />
+        <Hero
+          skipAnimation={!!watchedAnimation}
+          initialRotation={initialRotation}
+          client:only
+        />
+      </div>
 
       <div class="pt-8"></div>
 

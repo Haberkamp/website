@@ -15,7 +15,6 @@ export function Hero({
   const stopRotationCookieRef = useRef(false);
 
   const [showButton, setShowButton] = useState(skipAnimation);
-  const [animationCompleted, setAnimationCompleted] = useState(skipAnimation);
   const [currentRotation, setCurrentRotation] = useState(initialRotation);
   const animationFrameRef = useRef<number | null>(null);
 
@@ -84,7 +83,6 @@ export function Hero({
       // t=6.5: complete
       await wait(2600);
       document.cookie = "watched-animation=true; path=/; max-age=31536000";
-      setAnimationCompleted(true);
     };
 
     run();
@@ -121,57 +119,20 @@ export function Hero({
     return () => clearInterval(i);
   }, [currentRotation]);
 
-  const handleReplay = () => {
-    stopRotationCookieRef.current = true;
-    document.cookie = "watched-animation=; path=/; max-age=0";
-    document.cookie = "rotation=; path=/; max-age=0";
-    window.location.reload();
-  };
-
   return (
     <div className="w-full min-h-screen grid place-items-center">
-      {(skipAnimation || animationCompleted) && (
-        <motion.button
-          onClick={handleReplay}
-          initial={{ opacity: skipAnimation ? 1 : 0 }}
-          animate={{ opacity: 1 }}
-          transition={skipAnimation ? { duration: 0 } : { duration: 0.3 }}
-          className="absolute cursor-pointer top-4 right-4 text-base text-gray-600 hover:text-black transition-colors duration-200 ease-out-expo focus-visible:outline-2 focus-visible:outline-red-500 outline-offset-2"
-        >
-          Replay animation
-        </motion.button>
-      )}
-
-      <motion.ul
-        className="flex items-center gap-3 absolute top-4 left-4"
-        initial={{ opacity: skipAnimation ? 1 : 0 }}
-        animate={{ opacity: 1 }}
-        transition={
-          skipAnimation
-            ? { duration: 0 }
-            : { type: "spring", stiffness: 150, velocity: 0, duration: 1.25, delay: 6.5 }
-        }
+      <motion.div 
+        layout
+        transition={{ type: "spring", stiffness: 300, damping: 30 }}
+        className="flex flex-col md:flex-row items-center px-4"
       >
-        <li>
-          <a
-            href="https://x.com/n_haberkamp"
-            className="text-gray-600 hover:text-black text-base transition-colors duration-200 ease-out-expo focus-visible:outline-2 focus-visible:outline-red-500 outline-offset-2"
-          >
-            Twitter
-          </a>
-        </li>
-        <li>
-          <a
-            href="https://www.linkedin.com/in/nils-haberkamp/"
-            className="text-gray-600 hover:text-black text-base transition-colors duration-200 ease-out-expo focus-visible:outline-2 focus-visible:outline-red-500 outline-offset-2"
-          >
-            LinkedIn
-          </a>
-        </li>
-      </motion.ul>
-
-      <motion.div className="flex flex-col md:flex-row items-center gap-16 px-4">
-        <div ref={blinkRef} aria-hidden="true" className="size-[200px]">
+        <motion.div 
+          layout
+          transition={{ type: "spring", stiffness: 300, damping: 30 }}
+          ref={blinkRef} 
+          aria-hidden="true" 
+          className="size-[200px]"
+        >
           <div ref={scaleRef} style={{ transform: skipAnimation ? "scale(1)" : "scale(0.1)" }}>
             <div
               ref={rotateRef}
@@ -183,66 +144,70 @@ export function Hero({
               })()}
             </div>
           </div>
-        </div>
+        </motion.div>
 
         <motion.div
           layout="preserve-aspect"
           transition={{ visualDuration: 0.15, type: "spring", stiffness: 100 }}
+          className=""
         >
           <motion.div
-            className="max-w-[300px]"
+            className="max-w-[364px] flex md:justify-end"
             initial={
               skipAnimation
                 ? isMobile
                   ? { height: "auto", width: 300 }
-                  : { width: 300, height: "auto" }
+                  : { width: 364, height: "auto" }
                 : isMobile
                   ? { height: 0, width: 300 }
                   : { width: 0, height: "auto" }
             }
-            animate={isMobile ? { height: "auto", width: 300 } : { width: 300, height: "auto" }}
-            transition={skipAnimation ? { duration: 0 } : { ease: "easeInOut", delay: 4.5 }}
+            animate={isMobile ? { height: "auto", width: 300 } : { width: 364, height: "auto" }}
+            transition={skipAnimation ? { duration: 0 } : { type: "spring", stiffness: 200, damping: 30, delay: 4.5 }}
             style={{ overflow: showButton ? "visible" : "hidden" }}
           >
-            {skipAnimation ? (
-              <>
-                <p className="text-2xl font-medium text-balance" style={{ width: 300 }}>
-                  Hi, I'm Nils.
-                </p>
-                <p className="text-pretty mt-1" style={{ width: 300 }}>
-                  I work at Shopware as a Design Engineer. Where I maintain the Meteor Design System. I love to build
-                  user interfaces that look and feel great.
-                </p>
-              </>
-            ) : (
-              <>
-                <TextEffect delay={4.65} speedReveal={1.5} className="text-2xl font-medium text-balance" style={{ width: 300 }}>
-                  Hi, I'm Nils.
-                </TextEffect>
-                <TextEffect
-                  delay={5}
-                  speedReveal={6}
-                  className="text-pretty mt-1"
-                  style={{ width: 300 }}
-                  onAnimationComplete={() => setShowButton(true)}
-                >
-                  I work at Shopware as a Design Engineer. Where I maintain the Meteor Design System. I love to build
-                  user interfaces that look and feel great.
-                </TextEffect>
-              </>
-            )}
+            <div className="text-left" style={{ width: 300 }}>
+              <div className="mt-16 md:mt-0" />
+              {skipAnimation ? (
+                <>
+                  <p className="text-2xl font-medium text-balance" style={{ width: 300 }}>
+                    Hi, I'm Nils.
+                  </p>
+                  <p className="text-pretty mt-1" style={{ width: 300 }}>
+                    I work at Shopware as a Design Engineer. Where I maintain the Meteor Design System. I love to build
+                    user interfaces that look and feel great.
+                  </p>
+                </>
+              ) : (
+                <>
+                  <TextEffect delay={4.65} speedReveal={1.5} className="text-2xl font-medium text-balance" style={{ width: 300 }}>
+                    Hi, I'm Nils.
+                  </TextEffect>
+                  <TextEffect
+                    delay={5}
+                    speedReveal={6}
+                    className="text-pretty mt-1"
+                    style={{ width: 300 }}
+                    onAnimationComplete={() => setShowButton(true)}
+                  >
+                    I work at Shopware as a Design Engineer. Where I maintain the Meteor Design System. I love to build
+                    user interfaces that look and feel great.
+                  </TextEffect>
+                </>
+              )}
 
-            {showButton && (
-              <motion.a
-                initial={{ opacity: skipAnimation ? 1 : 0, y: skipAnimation ? 0 : 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={skipAnimation ? { duration: 0 } : { visualDuration: 0.15, type: "spring", stiffness: 100 }}
-                className="inline-flex items-center ease-out-expo justify-center hover:bg-neutral-600 cursor-pointer transition-colors duration-200 mt-4 bg-black text-white min-h-11 px-6 outline-offset-2 focus-visible:outline-2 outline-red-500"
-                href="#projects"
-              >
-                See my work
-              </motion.a>
-            )}
+              {showButton && (
+                <motion.a
+                  initial={{ opacity: skipAnimation ? 1 : 0, y: skipAnimation ? 0 : 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={skipAnimation ? { duration: 0 } : { visualDuration: 0.15, type: "spring", stiffness: 100 }}
+                  className="inline-flex items-center ease-out-expo justify-center hover:bg-neutral-600 cursor-pointer transition-colors duration-200 mt-4 bg-black text-white min-h-11 px-6 outline-offset-2 focus-visible:outline-2 outline-red-500"
+                  href="#projects"
+                >
+                  See my work
+                </motion.a>
+              )}
+            </div>
           </motion.div>
         </motion.div>
       </motion.div>
