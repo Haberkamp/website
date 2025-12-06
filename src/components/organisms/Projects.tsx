@@ -6,10 +6,11 @@ import { GraphicSquareInSquare } from "../atoms/GraphicSquareInSquare";
 import { GraphicSquareInTitltedSquare } from "../atoms/GraphicSquareInTitltedSquare";
 import { GraphicStar } from "../atoms/GraphicStar";
 import { GraphicTwoHalfCircles } from "../atoms/GraphicTwoHalfCircles";
+import { GraphicArrows } from "../atoms/GraphicArrows";
 import { GraphicX } from "../atoms/GraphicX";
 import { ProjectCard } from "../molecules/ProjectCard";
 
-const ITEM_COUNT = 7;
+const ITEM_COUNT = 8;
 const COL_MIN_WIDTH = 250;
 const GAP = 16;
 
@@ -110,6 +111,15 @@ export function Projects() {
         title="ts-redacted"
         description="Prevent secret values getting leaked in logs or API responses"
         href="https://github.com/Haberkamp/ts-redacted"
+        onHover={setCursorText}
+      />
+
+      <ProjectCard
+        logo={({ isHovered }) => <GraphicArrows isHovered={isHovered} />}
+        number="08"
+        title="InlineEdit"
+        description="Headless, composable editable text component for React"
+        href="https://github.com/haberkamp/inline-edit"
         onHover={setCursorText}
       />
       {Array.from({ length: fillers }).map((_, i) => (
