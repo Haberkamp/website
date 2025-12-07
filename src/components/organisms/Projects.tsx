@@ -8,9 +8,10 @@ import { GraphicStar } from "../atoms/GraphicStar";
 import { GraphicTwoHalfCircles } from "../atoms/GraphicTwoHalfCircles";
 import { GraphicArrows } from "../atoms/GraphicArrows";
 import { GraphicX } from "../atoms/GraphicX";
+import { GraphicKachi } from "../atoms/GraphicKachi";
 import { ProjectCard } from "../molecules/ProjectCard";
 
-const ITEM_COUNT = 8;
+const ITEM_COUNT = 9;
 const COL_MIN_WIDTH = 250;
 const GAP = 16;
 
@@ -122,6 +123,16 @@ export function Projects() {
         href="https://github.com/haberkamp/inline-edit"
         onHover={setCursorText}
       />
+
+      <ProjectCard
+        logo={({ isHovered }) => <GraphicKachi isHovered={isHovered} />}
+        number="09"
+        title="Kachi"
+        description="Visually display your keystrokes in real time"
+        href="https://kachi.haberkamp.dev/"
+        onHover={setCursorText}
+      />
+
       {Array.from({ length: fillers }).map((_, i) => (
         <div
           key={i}
