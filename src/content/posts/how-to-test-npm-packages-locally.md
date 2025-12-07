@@ -20,6 +20,9 @@ Luckily, `yalc` solves this.
 
 ## The Solution
 
+With `yalc` we can publish packages locally and other projects
+can install the local version of your package.
+
 Using `yalc` is easy. It takes 2 steps:
 
 1. Publish the package locally
