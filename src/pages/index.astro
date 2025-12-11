@@ -53,7 +53,7 @@ const articles: CollectionEntry<"posts">[] = await getCollection("posts");
 
                 <div class="pt-2" />
 
-                <p>{article.data.content}</p>
+                <p class="text-pretty">{article.data.content}</p>
               </a>
             </li>
           ))}
