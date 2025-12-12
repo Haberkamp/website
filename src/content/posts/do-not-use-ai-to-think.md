@@ -1,5 +1,5 @@
 ---
-title: Do not use AI for thinking
+title: Do not use AI for think­ing
 content: How we're using AI wrong
 ---
 

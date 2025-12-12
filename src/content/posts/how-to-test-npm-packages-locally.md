@@ -1,5 +1,5 @@
 ---
-title: How to test npm packages locally
+title: How to test npm pack­ages lo­cal­ly
 content: Test your npm packages before publishing them to the npm registry
 ---
 

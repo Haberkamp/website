@@ -1,5 +1,5 @@
 ---
-title: Solving the Pain of Margins in Base Components
+title: Solving the Pain of Mar­gins in Base Com­po­nents
 content: Default margins on base components cause a lot of pain, needing to override the base components, a lot. Learn about strategies to combat default margins.
 # publishedAt: 2025-02-11
 ---

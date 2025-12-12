@@ -1,5 +1,5 @@
 ---
-title: How to create multiple entrypoints for npm packages
+title: How to create multiple entry­points for npm packages
 content: Create little "sub-packages" like next/link or next/navigation
 ---
 

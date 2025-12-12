@@ -17,6 +17,62 @@
   src: url('/fonts/inter/Inter-Medium.woff2') format('woff2');
 }
 
+@font-face {
+  font-family: 'Redaction';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/redaction/Redaction-Regular.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Redaction_10';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/redaction/Redaction_10-Regular.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Redaction_20';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/redaction/Redaction_20-Regular.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Redaction_35';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/redaction/Redaction_35-Regular.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Redaction_50';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/redaction/Redaction_50-Regular.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Redaction_70';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/redaction/Redaction_70-Regular.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Redaction_100';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/redaction/Redaction_100-Regular.woff2') format('woff2');
+}
+
 @theme {
   --ease-in-quad: cubic-bezier(0.55, 0.085, 0.68, 0.53);
   --ease-in-cubic: cubic-bezier(0.55, 0.055, 0.675, 0.19);
@@ -40,11 +96,16 @@
   --ease-in-out-circ: cubic-bezier(0.785, 0.135, 0.15, 0.86);
 
   --font-sans: 'Inter', system-ui, sans-serif;
+  --font-heading: 'Redaction', serif;
 }
 
 .prose :is(p, li) {
   color: #000;
   text-wrap: pretty;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
 }
 
 .prose :is(h1, h2, h3, h4, h5, h6) {

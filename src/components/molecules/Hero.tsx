@@ -1,6 +1,7 @@
 import { motion, animate } from "motion/react";
 import { TextEffect } from "../atoms/TextEffect";
 import { useEffect, useState, useRef } from "react";
+import { GimmicHeading } from "../atoms/GimmicHeading";
 
 export function Hero({
   skipAnimation,
@@ -15,6 +16,7 @@ export function Hero({
   const stopRotationCookieRef = useRef(false);
 
   const [showButton, setShowButton] = useState(skipAnimation);
+  const [titleReady, setTitleReady] = useState(skipAnimation);
   const [currentRotation, setCurrentRotation] = useState(initialRotation);
   const animationFrameRef = useRef<number | null>(null);
 
@@ -80,8 +82,12 @@ export function Hero({
       const start = initialRotation % 360;
       animate(rotate, { rotate: [start, start + 360] }, { ease: "linear", duration: 200, repeat: Infinity });
 
+      // t=5.5: container has expanded, enable title cursor effect
+      await wait(1000);
+      setTitleReady(true);
+
       // t=6.5: complete
-      await wait(2600);
+      await wait(1600);
       document.cookie = "watched-animation=true; path=/; max-age=31536000";
     };
 
@@ -170,9 +176,12 @@ export function Hero({
               <div className="mt-16 md:mt-0" />
               {skipAnimation ? (
                 <>
-                  <p className="text-2xl font-medium text-balance" style={{ width: 300 }}>
-                    Hi, I'm Nils.
-                  </p>
+                  <GimmicHeading
+                    as="p"
+                    text="Hi, I'm Nils."
+                    className="text-2xl font-medium text-balance"
+                    style={{ width: 300 }}
+                  />
                   <p className="text-pretty mt-1" style={{ width: 300 }}>
                     I work at Shopware as a Design Engineer. Where I maintain the Meteor Design System. I love to build
                     user interfaces that look and feel great.
@@ -180,9 +189,13 @@ export function Hero({
                 </>
               ) : (
                 <>
-                  <TextEffect delay={4.65} speedReveal={1.5} className="text-2xl font-medium text-balance" style={{ width: 300 }}>
-                    Hi, I'm Nils.
-                  </TextEffect>
+                  <GimmicHeading
+                    as="p"
+                    text="Hi, I'm Nils."
+                    className="text-2xl font-medium text-balance"
+                    style={{ width: 300 }}
+                    disabled={!titleReady}
+                  />
                   <TextEffect
                     delay={5}
                     speedReveal={6}
