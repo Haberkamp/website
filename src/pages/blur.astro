@@ -2,7 +2,8 @@
 import Layout from "../layouts/Layout.astro";
 import BackButton from "../components/atoms/BackButton.astro";
 import sharp from "sharp";
-import BeautifulImage from "../assets/blur.png";
+import DesktopImage from "../assets/blur-desktop.png";
+import MobileImage from "../assets/blur-mobile.png";
 import { readFile } from "node:fs/promises";
 import type { ImageMetadata } from "astro";
 import { isRemoteImage } from "astro/assets/utils";
@@ -35,25 +36,40 @@ export async function getImageBuffer(imageMetadata: ImageMetadata | string): Pro
 	return buffer;
 }
 
-const dataURL = await imageToDataURL(await getImageBuffer(BeautifulImage));
+const desktopDataURL = await imageToDataURL(await getImageBuffer(DesktopImage));
+const mobileDataURL = await imageToDataURL(await getImageBuffer(MobileImage));
 ---
 
 <Layout title="Blurry placeholder experiment | Nils Haberkamp">
     <div class="grid place-items-center min-h-screen">
-        <div class="w-3/4 md:w-2/3">
+        <div class="w-2/3">
             <BackButton />
 
             <div class="pt-8" />
 
-            <div class="w-full aspect-video">
+            <!-- Mobile: portrait aspect ratio -->
+            <div class="w-full aspect-[3/4] md:hidden">
                 <div class="relative w-full h-full overflow-hidden">
-                    <img class="w-full h-full" src={dataURL} aria-hidden="true" alt="" />
+                    <img class="w-full h-full" src={mobileDataURL} aria-hidden="true" alt="" />
 
                     <img
                         alt="Aerial view of a coastal archipelago with turquoise-blue water, small rocky green islands, and a connected village of white and colorful houses linked by winding roads and bridges stretching across the sea."
-                        id="main-image"
-                        class="absolute inset-0 z-10"
-                        data-src={BeautifulImage.src}
+                        class="main-image absolute inset-0 z-10"
+                        data-src={MobileImage.src}
+                        style="clip-path: inset(100% 0 0 0);"
+                    />
+                </div>
+            </div>
+
+            <!-- Desktop: landscape aspect ratio -->
+            <div class="hidden md:block w-full aspect-video">
+                <div class="relative w-full h-full overflow-hidden">
+                    <img class="w-full h-full" src={desktopDataURL} aria-hidden="true" alt="" />
+
+                    <img
+                        alt="Aerial view of a coastal archipelago with turquoise-blue water, small rocky green islands, and a connected village of white and colorful houses linked by winding roads and bridges stretching across the sea."
+                        class="main-image absolute inset-0 z-10"
+                        data-src={DesktopImage.src}
                         style="clip-path: inset(100% 0 0 0);"
                     />
                 </div>
@@ -112,14 +128,28 @@ const dataURL = await imageToDataURL(await getImageBuffer(BeautifulImage));
 </style>
 
 <script>
-    const img = document.getElementById("main-image") as HTMLImageElement;
+    const images = document.querySelectorAll<HTMLImageElement>(".main-image");
+    let animationPlayed = false;
 
-    function reveal() {
-        img.classList.add("reveal");
-    }
-
-    setTimeout(() => {
-        img.src = img.dataset.src!;
-        img.addEventListener("load", reveal);
-    }, 700);
+    images.forEach((img) => {
+        setTimeout(() => {
+            img.src = img.dataset.src!;
+            img.addEventListener("load", () => {
+                if (animationPlayed) {
+                    // Animation already played for another image, skip to final state
+                    img.style.clipPath = "inset(0 0 0 0)";
+                } else {
+                    img.classList.add("reveal");
+                    img.addEventListener("animationend", () => {
+                        animationPlayed = true;
+                        // Set all images to final state to prevent re-animation on resize
+                        images.forEach((i) => {
+                            i.style.clipPath = "inset(0 0 0 0)";
+                            i.classList.remove("reveal");
+                        });
+                    }, { once: true });
+                }
+            });
+        }, 700);
+    });
 </script>
