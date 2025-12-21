@@ -18,9 +18,9 @@ const articles: CollectionEntry<"posts">[] = await getCollection("posts");
 ---
 
 <Layout title="Nils Haberkamp">
-  <div class="relative z-10 bg-white">
       <div class="w-full min-h-screen relative">
         <TopNav skipAnimation={!!watchedAnimation} client:load />
+
         <Hero
           skipAnimation={!!watchedAnimation}
           initialRotation={initialRotation}
@@ -60,6 +60,29 @@ const articles: CollectionEntry<"posts">[] = await getCollection("posts");
         </ul>
 
         <div class="pt-48"></div>
+
+        <h2 class="text-2xl font-medium text-center scroll-mt-20">
+          Experiments
+        </h2>
+
+        <div class="pt-8"></div>
+
+        <ul class="flex w-full max-w-2xl mx-auto flex-col">
+          <li>
+            <a href="/blur" class="transition-colors duration-200 ease-out-expo block hover:text-white hover:bg-black px-6 py-4 focus-visible:outline-2 focus-visible:outline-red-500 outline-offset-2">
+              <h3 class="!font-sans text-xl font-medium text-pretty leading-[1.1]">
+                Blurry placeholder
+              </h3>
+
+              <div class="pt-2" />
+
+              <p class="text-pretty">
+                Improve UX by showing a blurry placeholder image until the actual image is loaded.
+              </p>
+            </a>
+          </li>
+        </ul>
+
+        <div class="pt-48"></div>
       </div>
-    </div>
 </Layout>

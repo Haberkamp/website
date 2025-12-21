@@ -1,0 +1,125 @@
+---
+import Layout from "../layouts/Layout.astro";
+import BackButton from "../components/atoms/BackButton.astro";
+import sharp from "sharp";
+import BeautifulImage from "../assets/blur.png";
+import { readFile } from "node:fs/promises";
+import type { ImageMetadata } from "astro";
+import { isRemoteImage } from "astro/assets/utils";
+
+async function imageToDataURL(image: ArrayBuffer): Promise<string> {
+    const buffer = await sharp(image)
+        .resize(4, 4, { fit: "cover" })
+        .ensureAlpha()
+        .webp()
+        .toBuffer();
+
+    return `data:image/webp;base64,${buffer.toString("base64")}`;
+}
+
+export async function getImageBuffer(imageMetadata: ImageMetadata | string): Promise<ArrayBuffer> {
+	if (isRemoteImage(imageMetadata)) {
+		return await fetch(imageMetadata).then((res) => res.arrayBuffer());
+	}
+
+	const filename = imageMetadata.src
+		.replace(/^\/@fs/, "/")
+		.replace(/\?.+$/, "");
+
+	const imageFsPath = import.meta.env.PROD
+		? ["./dist/server", filename].join("")
+		: filename;
+
+	const { buffer } = await readFile(imageFsPath);
+
+	return buffer;
+}
+
+const dataURL = await imageToDataURL(await getImageBuffer(BeautifulImage));
+---
+
+<Layout title="Blurry placeholder experiment | Nils Haberkamp">
+    <div class="grid place-items-center min-h-screen">
+        <div class="w-3/4 md:w-2/3">
+            <BackButton />
+
+            <div class="pt-8" />
+
+            <div class="w-full aspect-video">
+                <div class="relative w-full h-full overflow-hidden">
+                    <img class="w-full h-full" src={dataURL} aria-hidden="true" alt="" />
+
+                    <img
+                        alt="Aerial view of a coastal archipelago with turquoise-blue water, small rocky green islands, and a connected village of white and colorful houses linked by winding roads and bridges stretching across the sea."
+                        id="main-image"
+                        class="absolute inset-0 z-10"
+                        data-src={BeautifulImage.src}
+                        style="clip-path: inset(100% 0 0 0);"
+                    />
+                </div>
+            </div>
+        </div>
+    </div>
+</Layout>
+
+<style>
+    :root {
+        --ease-in-quad: cubic-bezier(0.55, 0.085, 0.68, 0.53);
+        --ease-in-cubic: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+        --ease-in-quart: cubic-bezier(0.895, 0.03, 0.685, 0.22);
+        --ease-in-quint: cubic-bezier(0.755, 0.05, 0.855, 0.06);
+        --ease-in-expo: cubic-bezier(0.95, 0.05, 0.795, 0.035);
+        --ease-in-circ: cubic-bezier(0.6, 0.04, 0.98, 0.335);
+
+        --ease-out-quad: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        --ease-out-cubic: cubic-bezier(0.215, 0.61, 0.355, 1);
+        --ease-out-quart: cubic-bezier(0.165, 0.84, 0.44, 1);
+        --ease-out-quint: cubic-bezier(0.23, 1, 0.32, 1);
+        --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
+        --ease-out-circ: cubic-bezier(0.075, 0.82, 0.165, 1);
+
+        --ease-in-out-quad: cubic-bezier(0.455, 0.03, 0.515, 0.955);
+        --ease-in-out-cubic: cubic-bezier(0.645, 0.045, 0.355, 1);
+        --ease-in-out-quart: cubic-bezier(0.77, 0, 0.175, 1);
+        --ease-in-out-quint: cubic-bezier(0.86, 0, 0.07, 1);
+        --ease-in-out-expo: cubic-bezier(1, 0, 0, 1);
+        --ease-in-out-circ: cubic-bezier(0.785, 0.135, 0.15, 0.86);
+    }
+
+    @keyframes reveal-clip {
+        from {
+            clip-path: inset(100% 0 0 0);
+        }
+        to {
+            clip-path: inset(0 0 0 0);
+        }
+    }
+
+    @keyframes reveal-scale {
+        from {
+            scale: 1.1;
+        }
+        to {
+            scale: 1;
+        }
+    }
+
+    .reveal {
+        animation:
+            reveal-clip 0.6s var(--ease-in-out-cubic) forwards,
+            reveal-scale 0.7s var(--ease-in-out-quart) forwards;
+    }
+</style>
+
+<script>
+    const img = document.getElementById("main-image") as HTMLImageElement;
+
+    function reveal() {
+        img.classList.add("reveal");
+    }
+
+    setTimeout(() => {
+        img.src = img.dataset.src!;
+        img.addEventListener("load", reveal);
+    }, 700);
+</script>

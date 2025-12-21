@@ -26,7 +26,9 @@ const { title } = Astro.props;
     <title>{title}</title>
   </head>
   <body class="relative pb-32 sm:pb-48 md:pb-96 selection:bg-black selection:text-white">
-    <slot />
+    <div class="relative z-10 bg-white">
+      <slot />
+    </div>
     <Footer />
   </body>
 </html>
