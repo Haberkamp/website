@@ -4,6 +4,11 @@ content: Default margins on base components cause a lot of pain, needing to over
 
 ---
 import { ImageLightbox } from "../../components/atoms/ImageLightbox";
+import { Image } from "astro:assets";
+import cardComparison from "./assets/default-margin-card-comparison.png";
+import toolbar from "./assets/default-margin-toolbar.png";
+import stackForm from "./assets/stack-form.png";
+import stackFormWithButton from "./assets/stack-form-with-button.png";
 
 Being responsible for a Design System my job is to make sure it's as easy as possible for developers to build new UIs quickly while also making sure the UI looks consistent throughout the whole application. With default margins I fail to achieve both of those responsibilities.
 
@@ -11,7 +16,9 @@ Default margins on components are well intended, but from experience they cause 
 
 Let's say you have a row with multiple input fields. Now you could add some margin to every single input field, but that would mean adding a dozen or so classes just to add some spacing for every single input field, instead we add some bottom margin to _every_ input field, done. Default margins space out input fields in a consistent way across the whole app, which improves user experience.
 
-<ImageLightbox client:load loading="eager" src="/posts/assets/default-margin-card-comparison.png" alt="Two cards placed next to each other. The left card" />
+<ImageLightbox client:load>
+  <Image src={cardComparison} alt="Two cards placed next to each other. The left card" loading="eager" />
+</ImageLightbox>
 
 Now we already have our first problem. At the bottom of the card, we have some unnecessary spacing. To get rid of that we can simply add a class to that element and remove the margin, or we could use a `:last-of-type` selector to it and remove the margin.
 
@@ -19,7 +26,9 @@ Default margins make base components work only in a single context. It's no long
 
 But now, we need to use the `TextInput` inside a toolbar. Now we have the same problem again. The toolbar is too large. The solution? We add a class and remove the bottom margin. We have to do this every time we need to use the `TextInput` outside of a card. This goes against the idea of base components. We create base components so we can use them in any context, and not a specific one.
 
-<ImageLightbox client:load src="/posts/assets/default-margin-toolbar.png" alt="A toolbar with a search in the middle and two buttons on right. A sign in and a log in button" />
+<ImageLightbox client:load>
+  <Image src={toolbar} alt="A toolbar with a search in the middle and two buttons on right. A sign in and a log in button" />
+</ImageLightbox>
 
 I recently talked to a developer who used the base components every day. For him, the biggest pain point was the default margin. He told me that he uses the base components outside of the card's body a lot. Sometimes in a top toolbar, in a card footer, or in a custom-built list. It annoyed him that he needed to manually remove the margin many times over and over.
 
@@ -47,7 +56,9 @@ The above selector adds a top margin to every direct child except the first one.
 </form>
 ```
 
-<ImageLightbox client:load src="/posts/assets/stack-form.png" alt="A form with three vertically aligned input fields. Each input has a bottom margin of 1rem, except the last one has none." />
+<ImageLightbox client:load>
+  <Image src={stackForm} alt="A form with three vertically aligned input fields. Each input has a bottom margin of 1rem, except the last one has none." />
+</ImageLightbox>
 
 Now, what if you want to have spacing that's wider than 1rem? That's easy; just define a CSS custom property called `--space` using inline styles or by adding a custom class and defining the spacing there.
 
@@ -79,7 +90,9 @@ But what if I have an edge case where everything needs the same spacing except f
 </form>
 ```
 
-<ImageLightbox client:load src="/posts/assets/stack-form-with-button.png" alt="A form with three vertically aligned input fields and a button. The input fields have a bottom margin of one rem, except the last one. It has a bottom margin of 2 rem." />
+<ImageLightbox client:load>
+  <Image src={stackFormWithButton} alt="A form with three vertically aligned input fields and a button. The input fields have a bottom margin of one rem, except the last one. It has a bottom margin of 2 rem." />
+</ImageLightbox>
 
 ## Potential downsides
 
