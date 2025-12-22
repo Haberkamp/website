@@ -1,10 +1,23 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import BackButton from "../components/atoms/BackButton.astro";
+import SpriteAnimationWithControls from "../components/atoms/SpriteAnimationWithControls";
 ---
 
 <Layout title="Sprite animation | Nils Haberkamp">
-    <div class="grid place-items-center min-h-screen">
-        <div class="w-2 h-2 bg-black"></div>
+    <div class="relative container max-w-2xl px-4 mx-auto min-h-screen grid place-items-center">
+        <div class="w-full flex flex-col items-center">
+            <BackButton class:list="absolute -top-48 -left-22 sm:-left-48  md:-left-64 lg:-left-96" />
+
+            <SpriteAnimationWithControls
+                client:load
+                spriteSheet="/sprite-animation.png"
+                frameCount={6}
+                frameWidth={32}
+                frameHeight={32}
+                fps={12}
+                className="scale-[4]"
+            />
+        </div>
     </div>
 </Layout>
-

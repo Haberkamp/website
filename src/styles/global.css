@@ -1,6 +1,12 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
+@custom-variant hover-device {
+  @media (hover: hover) {
+    @slot;
+  }
+}
+
 @font-face {
   font-family: 'Inter';
   font-style: normal;
