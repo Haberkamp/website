@@ -1,5 +1,4 @@
 ---
-import Footer from "../components/organisms/Footer.astro";
 import "../styles/global.css";
 
 interface Props {
@@ -10,7 +9,7 @@ const { title } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="en" class="scroll-smooth ml-[calc(100vw-100%)] mr-0 safari:bg-linear-to-b safari:from-black safari:from-50% safari:to-white safari:to-50%">
+<html lang="en" class="scroll-smooth ml-[calc(100vw-100%)] mr-0">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, viewport-fit=cover" />
@@ -25,11 +24,8 @@ const { title } = Astro.props;
 
     <title>{title}</title>
   </head>
-  <body class="relative pb-32 sm:pb-48 md:pb-96 selection:bg-black selection:text-white">
-    <div class="relative z-10 bg-white">
-      <slot />
-    </div>
-    <Footer />
+  <body class="relative selection:bg-black selection:text-white">
+    <slot />
   </body>
 </html>
 
