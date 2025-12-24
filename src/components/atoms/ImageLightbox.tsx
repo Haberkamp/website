@@ -1,4 +1,4 @@
-import { useRef, useId } from "react";
+import { useRef, useId, useEffect } from "react";
 
 interface ImageLightboxProps {
   children: React.ReactNode;
@@ -10,6 +10,27 @@ export function ImageLightbox({ children }: ImageLightboxProps) {
   const dialogImgRef = useRef<HTMLDivElement>(null);
   const id = useId();
   const transitionName = `lightbox${id.replace(/:/g, "-")}`;
+
+  useEffect(() => {
+    const dialog = dialogRef.current;
+    if (!dialog) return;
+
+    const handleClose = () => {
+      document.body.style.overflow = "";
+    };
+
+    const handleCancel = (e: Event) => {
+      e.preventDefault();
+      close();
+    };
+
+    dialog.addEventListener("close", handleClose);
+    dialog.addEventListener("cancel", handleCancel);
+    return () => {
+      dialog.removeEventListener("close", handleClose);
+      dialog.removeEventListener("cancel", handleCancel);
+    };
+  }, []);
 
   const open = () => {
     document.body.style.overflow = "hidden";
