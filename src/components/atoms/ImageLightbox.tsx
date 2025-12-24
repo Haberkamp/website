@@ -56,16 +56,16 @@ export function ImageLightbox({ children }: ImageLightboxProps) {
       <div
         ref={thumbRef}
         onClick={open}
-        className="cursor-zoom-in [&>img]:w-full"
+        className="cursor-zoom-in [&_img]:w-full"
       >
         {children}
       </div>
       <dialog
         ref={dialogRef}
         onClick={close}
-        className="not-prose cursor-zoom-out backdrop:bg-black/80 bg-transparent max-w-[90vw] md:max-w-[60vw] max-h-[90vh] p-0 m-auto outline-none"
+        className="not-prose cursor-zoom-out backdrop:bg-black/80 bg-transparent max-w-none max-h-none p-0 m-auto outline-none"
       >
-        <div ref={dialogImgRef} className="[&>img]:max-w-full [&>img]:max-h-[90vh] [&>img]:object-contain">
+        <div ref={dialogImgRef} className="[&_img]:max-w-[60vw] [&_img]:max-h-[70vh] [&_img]:w-auto [&_img]:h-auto [&_img]:object-contain">
           {children}
         </div>
       </dialog>

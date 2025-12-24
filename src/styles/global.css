@@ -23,7 +23,7 @@
   src: url('/fonts/inter/Inter-Medium.woff2') format('woff2');
 }
 
-@base {
+@layer base {
   html {
     margin-left: calc(100vw - 100%);
     margin-right: 0;
