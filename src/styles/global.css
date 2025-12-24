@@ -7,12 +7,6 @@
   }
 }
 
-@custom-variant safari {
-  @supports (-webkit-hyphens: none) {
-    @slot;
-  }
-}
-
 @font-face {
   font-family: 'Inter';
   font-style: normal;
@@ -29,6 +23,12 @@
   src: url('/fonts/inter/Inter-Medium.woff2') format('woff2');
 }
 
+@base {
+  html {
+    margin-left: calc(100vw - 100%);
+    margin-right: 0;
+  }
+}
 
 @theme {
   --ease-in-quad: cubic-bezier(0.55, 0.085, 0.68, 0.53);
