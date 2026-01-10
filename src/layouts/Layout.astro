@@ -3,9 +3,54 @@ import "../styles/global.css";
 
 interface Props {
   title: string;
+  description?: string;
 }
 
-const { title } = Astro.props;
+const { title, description = "Personal website of Nils Haberkamp" } = Astro.props;
+
+const siteUrl = "https://www.haberkamp.dev";
+
+const personSchema = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "@id": `${siteUrl}/#person`,
+  name: "Nils Haberkamp",
+  givenName: "Nils",
+  familyName: "Haberkamp",
+  url: siteUrl,
+  image: `${siteUrl}/profile.png`,
+  jobTitle: "Software Engineer",
+  description: "Software engineer specializing in web development",
+  sameAs: [
+    "https://github.com/haberkamp",
+    "https://www.linkedin.com/in/nils-haberkamp",
+    "https://twitter.com/n_haberkamp",
+  ],
+  knowsAbout: [
+    "Web Development",
+    "AI Coding",
+    "TypeScript",
+    "React",
+    "Tailwind CSS"
+  ],
+  worksFor: {
+    "@type": "Organization",
+    name: "shopware AG",
+  },
+};
+
+const websiteSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "@id": `${siteUrl}/#website`,
+  url: siteUrl,
+  name: "Nils Haberkamp",
+  description: "Personal website and portfolio of Nils Haberkamp",
+  publisher: {
+    "@id": `${siteUrl}/#person`,
+  },
+  inLanguage: "en-GB",
+};
 ---
 
 <!doctype html>
@@ -14,6 +59,7 @@ const { title } = Astro.props;
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
+    <meta name="description" content={description} />
 
     <link rel="icon" href="/favicon.ico" sizes="32x32" />
     <link rel="icon" href="/icon.svg" type="image/svg+xml" />
@@ -23,6 +69,10 @@ const { title } = Astro.props;
     <link rel="preload" href="/fonts/inter/Inter-Medium.woff2" as="font" type="font/woff2" crossorigin />
 
     <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="canonical" href={new URL(Astro.url.pathname, siteUrl).href} />
+
+    <script type="application/ld+json" set:html={JSON.stringify(personSchema)} />
+    <script type="application/ld+json" set:html={JSON.stringify(websiteSchema)} />
 
     <title>{title}</title>
   </head>
