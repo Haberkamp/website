@@ -2,6 +2,7 @@
 import Layout from "../../layouts/Layout.astro";
 import { getCollection, render } from "astro:content";
 import BackButton from "../../components/atoms/BackButton.astro";
+import Image from "astro/components/Image.astro";
 
 export async function getStaticPaths() {
   const posts = await getCollection("posts");
@@ -35,6 +36,48 @@ const { Content } = await render(article);
           </div>
 
           <div class="pt-32" />
+
+          <hr class="border-neutral-200" />
+
+          <div class="pt-8" />
+
+          <div class="flex items-start gap-4">
+            <Image 
+              width={56}
+              height={56}
+              src="/profile.png" 
+              alt="Nils Haberkamp" 
+              class="size-14 select-none"
+              style="-webkit-user-drag: none;"
+            />
+
+            <div>
+              <p class="font-medium -mt-1">Nils Haberkamp</p>
+
+              <p class="text-neutral-600 text-sm text-pretty">
+                Design Engineer at Shopware, maintaining the Meteor Design System. I love building user interfaces that look and feel great.
+              </p>
+
+              <div class="pt-3" />
+
+              <div class="flex gap-3">
+                <a 
+                  href="https://x.com/n_haberkamp" 
+                  class="text-sm text-neutral-600 hover:underline hover:text-black transition-colors duration-200 ease-out-expo focus-visible:outline-2 focus-visible:outline-red-500 outline-offset-2"
+                >
+                  Twitter
+                </a>
+                <a 
+                  href="https://www.linkedin.com/in/nils-haberkamp/" 
+                  class="text-sm text-neutral-600 hover:underline hover:text-black transition-colors duration-200 ease-out-expo focus-visible:outline-2 focus-visible:outline-red-500 outline-offset-2"
+                >
+                  LinkedIn
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div class="pt-16" />
         </article>
       </div>
 </Layout>
