@@ -23,19 +23,19 @@ const { Content } = await render(article);
 ---
 
 <Layout title={`${article.data.title} - Nils Haberkamp`}>
-      <div class="container max-w-2xl mx-auto px-4 py-8">
+      <div class="container max-w-2xl mx-auto px-4 py-8 min-h-dvh flex flex-col">
         <div class="mb-8">
           <BackButton />
         </div>
         
-        <article class="max-w-2xl mx-auto min-h-dvh">
+        <article class="max-w-2xl mx-auto flex flex-col flex-grow">
           <h1 class="text-3xl font-medium mb-4 text-balance">{article.data.title}</h1>
 
           <div class="prose">
             <Content />
           </div>
 
-          <div class="pt-32" />
+          <div class="pt-32 flex-grow" />
 
           <hr class="border-neutral-200" />
 
@@ -76,8 +76,6 @@ const { Content } = await render(article);
               </div>
             </div>
           </div>
-
-          <div class="pt-16" />
         </article>
       </div>
 </Layout>
