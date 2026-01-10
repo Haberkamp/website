@@ -15,6 +15,7 @@ const initialRotation = rotationCookie?.value
   : 0;
 
 const articles: CollectionEntry<"posts">[] = await getCollection("posts");
+const bookmarks: CollectionEntry<"bookmarks">[] = await getCollection("bookmarks");
 ---
 
 <Layout title="Nils Haberkamp">
@@ -94,6 +95,33 @@ const articles: CollectionEntry<"posts">[] = await getCollection("posts");
               </p>
             </a>
           </li>
+        </ul>
+
+        <div class="pt-48"></div>
+
+        <h2 class="text-2xl font-medium text-center scroll-mt-20">
+          Bookmarks
+        </h2>
+
+        <div class="pt-8"></div>
+
+        <ul class="flex w-full max-w-2xl mx-auto flex-col">
+          {bookmarks.map((bookmark) => (
+            <li>
+              <a href={bookmark.data.url} target="_blank" rel="noopener noreferrer" class="transition-colors duration-200 ease-out-expo block hover:text-white hover:bg-black px-6 py-4 focus-visible:outline-2 focus-visible:outline-red-500 outline-offset-2">
+                <h3 class="!font-sans text-xl font-medium text-pretty leading-[1.1]">
+                  {bookmark.data.title}
+                </h3>
+
+                {bookmark.data.description && (
+                  <>
+                    <div class="pt-2" />
+                    <p class="text-pretty">{bookmark.data.description}</p>
+                  </>
+                )}
+              </a>
+            </li>
+          ))}
         </ul>
 
         <div class="pt-48"></div>
