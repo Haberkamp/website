@@ -1,0 +1,26 @@
+[
+  {
+    "id": "modalzmodalzmodalz",
+    "title": "We use too many damn modals",
+    "url": "https://modalzmodalzmodalz.com/",
+    "description": "A manifesto on why modals are overused and what alternatives to consider."
+  },
+  {
+    "id": "open-closed-component",
+    "title": "The open/closed component",
+    "url": "https://dio.la/article/the-open-closed-component-part-1",
+    "description": "A powerful pattern for building extensible UI components that achieve more with less."
+  },
+  {
+    "id": "everything-bagel-components",
+    "title": "The \"everything bagel\" of components",
+    "url": "https://dio.la/article/the-everything-bagel-of-components",
+    "description": "On building complex repeatable UI patterns and when to use composition vs abstraction."
+  },
+  {
+    "id": "donut-components",
+    "title": "Delicious Donut Components",
+    "url": "https://frontendatscale.com/blog/donut-components",
+    "description": "An interactive guide to component composition with React Server Components."
+  }
+]
