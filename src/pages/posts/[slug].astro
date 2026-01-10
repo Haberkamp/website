@@ -1,15 +1,19 @@
 ---
 import Layout from "../../layouts/Layout.astro";
-import { getEntry, render } from "astro:content";
+import { getCollection, render } from "astro:content";
 import BackButton from "../../components/atoms/BackButton.astro";
-export const prerender = false;
 
-const { slug } = Astro.params;
-if (!slug) {
-  return Astro.redirect("/404");
+export async function getStaticPaths() {
+  const posts = await getCollection("posts");
+  return posts.map((post) => ({
+    params: { slug: post.id },
+  }));
 }
 
-const article = await getEntry("posts", slug);
+const { slug } = Astro.params;
+const posts = await getCollection("posts");
+const article = posts.find((post) => post.id === slug);
+
 if (!article) {
   return Astro.redirect("/404");
 }

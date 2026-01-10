@@ -7,11 +7,14 @@ import mdx from "@astrojs/mdx";
 
 import vercel from "@astrojs/vercel";
 
+import sitemap from "@astrojs/sitemap";
+
 // https://astro.build/config
 export default defineConfig({
-  integrations: [react(), mdx()],
+  integrations: [react(), mdx(), sitemap()],
   vite: { plugins: [tailwindcss()] },
   adapter: vercel(),
+  site: "https://www.haberkamp.dev",
   markdown: {
     shikiConfig: {
       theme:  'vitesse-light'
