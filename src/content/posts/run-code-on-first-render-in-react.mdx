@@ -1,0 +1,32 @@
+---
+title: Run code on first render in React
+content: useEffect is not your friend here, again...
+---
+
+## Intent
+
+(((Explain that you want to run code on the first render)))
+
+(((Add that the first idea would be to use useEffect)))
+
+## Obstacle
+
+(((Explain that useEffect runs after the DOM rendered)))
+(((Explain that useEffect is only for side effects or syncing with external systems)))
+
+## Resolution
+
+(((Explain to use useRef to track the first render)))
+
+Here's the code snippet:
+
+```tsx
+function useOnMounted(callback: () => void | Promise<void>) {
+    const isFirstRender = useRef(true);
+
+    if (isFirstRender.current) {
+        callback();
+        isFirstRender.current = false;
+    }
+}
+```
