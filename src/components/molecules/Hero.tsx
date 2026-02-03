@@ -174,8 +174,7 @@ export function Hero({
                     Hi, I'm Nils.
                   </p>
                   <p className="text-pretty mt-1" style={{ width: 300 }}>
-                    I work at Shopware as a Design Engineer. Where I maintain the Meteor Design System. I love to build
-                    user interfaces that look and feel great.
+                    I work at Laravel as a Senior Software Engineer, where I build cool frontend stuff, I think. 
                   </p>
                 </>
               ) : (
